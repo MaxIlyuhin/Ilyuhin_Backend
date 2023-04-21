@@ -14,7 +14,7 @@
 
         public int Number_of_visits { get; set; }
 
-        public enum Status { schoolboy, student }
+        public string Status { get; set; }
 
     }
 }

@@ -1,3 +1,5 @@
+using Ilyuhin_Backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ilyuhin_Backend
 {
@@ -6,7 +8,8 @@ namespace Ilyuhin_Backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddDbContext<LibContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("LibContext")));
             // Add services to the container.
 
             builder.Services.AddControllers();
