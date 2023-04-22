@@ -1,5 +1,6 @@
 using Ilyuhin_Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using MySql.EntityFrameworkCore.Extensions;
 
 namespace Ilyuhin_Backend
 {
@@ -9,7 +10,7 @@ namespace Ilyuhin_Backend
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<LibContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("LibContext")));
+            options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
             // Add services to the container.
 
             builder.Services.AddControllers();

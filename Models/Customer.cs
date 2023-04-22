@@ -14,7 +14,7 @@
 
         public int Number_of_visits { get; set; }
 
-        public string Status { get; set; }
+        //public string Status { get; set; }
 
     }
 }

@@ -10,7 +10,7 @@
 
         public int Number_of_reviews { get; set; }
 
-        public string Status { get; set; }
+        //public string Status { get; set; }
 
     }
 }
