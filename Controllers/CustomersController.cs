@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ilyuhin_Backend.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Ilyuhin_Backend.Controllers
 {
@@ -22,6 +24,7 @@ namespace Ilyuhin_Backend.Controllers
 
         // GET: api/Customers
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer()
         {
           if (_context.Customer == null)
@@ -33,6 +36,7 @@ namespace Ilyuhin_Backend.Controllers
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
           if (_context.Customer == null)
@@ -52,6 +56,7 @@ namespace Ilyuhin_Backend.Controllers
         // PUT: api/Customers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
             if (id != customer.Id)
@@ -97,6 +102,7 @@ namespace Ilyuhin_Backend.Controllers
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
             if (_context.Customer == null)

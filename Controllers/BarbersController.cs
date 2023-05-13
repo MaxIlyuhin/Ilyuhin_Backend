@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ilyuhin_Backend.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Ilyuhin_Backend.Controllers
 {
@@ -22,6 +24,7 @@ namespace Ilyuhin_Backend.Controllers
 
         // GET: api/Barbers
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<Barber>>> GetBarber()
         {
           if (_context.Barber == null)
@@ -33,6 +36,7 @@ namespace Ilyuhin_Backend.Controllers
 
         // GET: api/Barbers/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin, barber")]
         public async Task<ActionResult<Barber>> GetBarber(int id)
         {
           if (_context.Barber == null)
@@ -52,6 +56,7 @@ namespace Ilyuhin_Backend.Controllers
         // PUT: api/Barbers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin, barber")]
         public async Task<IActionResult> PutBarber(int id, Barber barber)
         {
             if (id != barber.Id)
@@ -97,6 +102,7 @@ namespace Ilyuhin_Backend.Controllers
 
         // DELETE: api/Barbers/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin, barber")]
         public async Task<IActionResult> DeleteBarber(int id)
         {
             if (_context.Barber == null)

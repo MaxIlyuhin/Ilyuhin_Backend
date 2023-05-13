@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ilyuhin_Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ilyuhin_Backend.Controllers
 {
@@ -22,6 +23,7 @@ namespace Ilyuhin_Backend.Controllers
 
         // GET: api/Bookings
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Bookings>>> GetBookings()
         {
           if (_context.Bookings == null)
@@ -33,6 +35,7 @@ namespace Ilyuhin_Backend.Controllers
 
         // GET: api/Bookings/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin, barber")]
         public async Task<ActionResult<Bookings>> GetBookings(int id)
         {
           if (_context.Bookings == null)
@@ -52,6 +55,7 @@ namespace Ilyuhin_Backend.Controllers
         // PUT: api/Bookings/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutBookings(int id, Bookings bookings)
         {
             if (id != bookings.Id)
@@ -97,6 +101,7 @@ namespace Ilyuhin_Backend.Controllers
 
         // DELETE: api/Bookings/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteBookings(int id)
         {
             if (_context.Bookings == null)

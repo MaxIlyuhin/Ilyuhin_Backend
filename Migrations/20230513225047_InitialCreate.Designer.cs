@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ilyuhin_Backend.Migrations
 {
     [DbContext(typeof(LibContext))]
-    [Migration("20230422083444_InitialCreate")]
+    [Migration("20230513225047_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -35,8 +35,20 @@ namespace Ilyuhin_Backend.Migrations
                     b.Property<int>("Number_of_reviews")
                         .HasColumnType("int");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("Rating")
                         .HasColumnType("int");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -91,8 +103,21 @@ namespace Ilyuhin_Backend.Migrations
                     b.Property<int>("Number_of_visits")
                         .HasColumnType("int");
 
-                    b.Property<int>("Telephone")
-                        .HasColumnType("int");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Telephone")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
