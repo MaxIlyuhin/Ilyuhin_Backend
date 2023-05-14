@@ -23,7 +23,6 @@ namespace Ilyuhin_Backend.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(type: "longtext", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
-                    Number_of_reviews = table.Column<int>(type: "int", nullable: false),
                     Username = table.Column<string>(type: "longtext", nullable: false),
                     Password = table.Column<string>(type: "longtext", nullable: false),
                     Role = table.Column<string>(type: "longtext", nullable: false)
@@ -59,10 +58,10 @@ namespace Ilyuhin_Backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(type: "longtext", nullable: false),
+                    LastName = table.Column<string>(type: "longtext", nullable: false),
                     Telephone = table.Column<string>(type: "longtext", nullable: false),
                     Email = table.Column<string>(type: "longtext", nullable: false),
                     Comments_on_booking = table.Column<string>(type: "longtext", nullable: false),
-                    Number_of_visits = table.Column<int>(type: "int", nullable: false),
                     Username = table.Column<string>(type: "longtext", nullable: false),
                     Password = table.Column<string>(type: "longtext", nullable: false),
                     Role = table.Column<string>(type: "longtext", nullable: false)

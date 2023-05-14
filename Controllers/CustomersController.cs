@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Ilyuhin_Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using MySqlX.XDevAPI;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ilyuhin_Backend.Controllers
 {
@@ -51,6 +53,50 @@ namespace Ilyuhin_Backend.Controllers
             }
 
             return customer;
+        }
+
+
+        [HttpGet("CustomersNumberOfVisits")]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<IEnumerable<Client>>> CustomersNumberOfVisits()
+        {
+            var query = from customer in _context.Customer
+                        join booking in _context.Bookings on customer.Id equals booking.Id_of_customer
+                        group customer by customer.FirstName into g
+                        select new
+                        {
+                            CustomerName = g.Key,
+                            BookingsCount = g.Count()
+                        };
+            if (query == null)
+            {
+                return NotFound();
+            }
+            return Ok(query);
+        }
+
+        [HttpGet("PopularServicesByCustomer")]
+        [Authorize(Roles = "admin, barber")]
+        public async Task<ActionResult<IEnumerable<Client>>> PopularServicesByCustomers()
+        {
+            var popularServicesByCustomer = _context.Bookings
+                .Join(_context.Customer, b => b.Id_of_customer, c => c.Id, (b, c) => new { Booking = b, Customer = c })
+                .GroupBy(bc => new { bc.Customer.FirstName, bc.Customer.LastName })
+                .Select(g => new
+                {
+                    Name = g.Key.FirstName + " " + g.Key.LastName,
+                    PopularService = g.GroupBy(bc => bc.Booking.Service)
+                                     .OrderByDescending(g2 => g2.Count())
+                                     .Select(g2 => g2.Key)
+                                     .FirstOrDefault()
+                })
+                .ToList();
+
+            if (popularServicesByCustomer == null)
+            {
+                return NotFound();
+            }
+            return Ok(popularServicesByCustomer);
         }
 
         // PUT: api/Customers/5

@@ -39,19 +39,11 @@ namespace Ilyuhin_Backend.Controllers
             var role = user != null ? user.Role : barber.Role;
             if (user != null)
             {
-                return new
-                {
-                    token = AuthOptions.GenerateToken(user.Role)
-                };
-                    //return new { token = AuthOptions.GenerateToken(user.Role), message = user.WelcomeMessage() };
+                    return new { token = AuthOptions.GenerateToken(user.Role), message = user.WelcomeMessage() };
                 }
             else
             {
-                return new
-                {
-                    token = AuthOptions.GenerateToken(barber.Role)
-                };
-                    //return new { token = AuthOptions.GenerateToken(barber.Role), message = barber.WelcomeMessage() };
+                    return new { token = AuthOptions.GenerateToken(barber.Role), message = barber.WelcomeMessage() };
                 }
         }
 

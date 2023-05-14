@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ilyuhin_Backend.Models;
 using Microsoft.AspNetCore.Authorization;
+using MySqlX.XDevAPI;
 
 namespace Ilyuhin_Backend.Controllers
 {
@@ -52,6 +53,83 @@ namespace Ilyuhin_Backend.Controllers
             return bookings;
         }
 
+
+        [HttpGet("BookingsByDate/{year}/{month}/{day}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Client>>> BookingsByDate(int year, int month, int day)
+        {
+            //var bookings = _context.Bookings
+            //    .Where(b => b.Time_of_booking.Year == year && b.Time_of_booking.Month == month && b.Time_of_booking.Day == day)
+            //    .ToList();
+            var bookings = from b in _context.Bookings
+                           join c in _context.Customer on b.Id_of_customer equals c.Id
+                           join r in _context.Barber on b.Id_of_Barber equals r.Id
+                           where b.Time_of_booking.Year == year && b.Time_of_booking.Month == month && b.Time_of_booking.Day == day
+                           select new
+                           {
+                               BookingId = b.Id,
+                               Customer = new
+                               {
+                                   Id = c.Id,
+                                   FirstName = c.FirstName,
+                                   LastName = c.LastName,
+                                   Telephone = c.Telephone,
+                                   Email = c.Email
+                               },
+                               Barber = new
+                               {
+                                   Id = r.Id,
+                                   FirstName = r.FirstName,
+                                   Rating = r.Rating
+                               },
+                               Service = b.Service,
+                               Price = b.Price,
+                               TimeOfBooking = b.Time_of_booking
+                           };
+
+            if (bookings == null)
+            {
+                return NotFound();
+            }
+            return Ok(bookings);
+        }
+
+
+        [HttpGet("TheMostPopularServices")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Client>>> TheMostPopularServices()
+        {
+            var popularServices = await _context.Bookings
+                          .GroupBy(b => b.Service)
+                          .OrderByDescending(g => g.Count())
+                          .Select(g => new { Service = g.Key, Count = g.Count() })
+                          .ToListAsync();
+            if (popularServices == null)
+            {
+                return NotFound();
+            }
+            return Ok(popularServices);
+        }
+
+
+        [HttpGet("TheMostPopularDate")]
+        [Authorize(Roles = "admin, barber")]
+        public async Task<ActionResult<IEnumerable<Client>>> TheMostPopularDate()
+        {
+            var mostPopularDate = await _context.Bookings
+                .GroupBy(b => b.Time_of_booking.Date)
+                .Select(g => new { Date = g.Key, Count = g.Count() })
+                .OrderByDescending(x => x.Count)
+                .Select(x => x.Date.ToString("dddd"))
+                .FirstOrDefaultAsync();
+
+            if (mostPopularDate == null)
+            {
+                return NotFound();
+            }
+            return Ok(mostPopularDate);
+        }
+
         // PUT: api/Bookings/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -87,6 +165,7 @@ namespace Ilyuhin_Backend.Controllers
         // POST: api/Bookings
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Bookings>> PostBookings(Bookings bookings)
         {
           if (_context.Bookings == null)
